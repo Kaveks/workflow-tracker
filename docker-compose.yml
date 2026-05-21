@@ -1,0 +1,38 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    container_name: workflow-tracker-backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./backend/.env
+    volumes:
+      - backend-data:/app
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          'python -c "import urllib.request, sys; sys.exit(0 if urllib.request.urlopen(''http://localhost:8000/health/'').status == 200 else 1)"',
+        ]
+      interval: 10s
+      timeout: 3s
+      retries: 6
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: workflow-tracker-frontend
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./frontend/.env.local
+    environment:
+      # Overrides the IS_DOCKER=false in .env.local when running in Docker.
+      IS_DOCKER: "true"
+    depends_on:
+      backend:
+        condition: service_healthy
+
+volumes:
+  backend-data:

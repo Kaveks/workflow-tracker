@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Environment / secrets
+#.env*
+
+# Local database
+db.sqlite3
+
+# Test and type-check caches
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+
+# Editor and OS
+.DS_Store
+.idea/
+.vscode/
+
+# Git
+.git/
+.gitignore
+
+# Docs and scripts (not needed inside the image)
+docs/
+README.md
