@@ -23,17 +23,17 @@ Draft → Submitted → Under Review → { Need More Information, Approved, Reje
 
 ## 1) Screenshots
 
-### i . Frontend — Application list (homepage)
+### i. Frontend — Application list (homepage)
 
-<!-- Add screenshot here after pushing to GitHub -->
+![Frontend application list](screenshots/listpage.png)
 
 ### ii. Backend — API docs (Swagger UI)
 
-<!-- Add screenshot here after pushing to GitHub -->
+![Backend API docs](screenshots/api_doc.png)
 
-### ii. Backend — Django admin panel
+### iii. Backend — Django admin panel
 
-<!-- Add screenshot here after pushing to GitHub -->
+![Django admin panel](screenshots/pannel.png)
 
 ---
 
