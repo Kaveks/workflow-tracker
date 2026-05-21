@@ -2,8 +2,8 @@
 
 COMPOSE ?= docker compose
 
-.PHONY: help build up down logs restart clean test backend-shell migrate \
-        createsuperuser backend-install frontend-install dev-backend dev-frontend
+.PHONY: help build up down logs restart clean test backend-shell makemigrations \
+        migrate createsuperuser backend-install frontend-install dev-backend dev-frontend
 
 help: ## Show this help
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  \033[36m%-20s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
@@ -30,7 +30,10 @@ clean: ## Stop the stack and DROP all volumes, images and networks
 backend-shell: ## Open a shell inside the backend container
 	$(COMPOSE) exec backend sh
 
-migrate: ## Apply Django migrations
+makemigrations: ## Create Django migration files from model changes
+	$(COMPOSE) exec backend python3 manage.py makemigrations
+
+migrate: ## Apply Django migrations to the database
 	$(COMPOSE) exec backend python3 manage.py migrate
 
 createsuperuser: ## Create a Django admin superuser (interactive)

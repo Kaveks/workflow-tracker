@@ -7,3 +7,8 @@ __pycache__/
 venv/
 .mypy_cache/
 .pytest_cache/
+
+# Django migrations — generated locally, not committed.
+# Keep __init__.py so the migrations package is importable after a fresh clone.
+*/migrations/*.py
+!*/migrations/__init__.py

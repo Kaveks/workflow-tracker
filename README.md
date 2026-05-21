@@ -21,23 +21,23 @@ Draft → Submitted → Under Review → { Need More Information, Approved, Reje
 
 ---
 
-## Screenshots
+## 1) Screenshots
 
-### 1 — Frontend — Application list (homepage)
-
-<!-- Add screenshot here after pushing to GitHub -->
-
-### 2 — Backend — API docs (Swagger UI)
+### i . Frontend — Application list (homepage)
 
 <!-- Add screenshot here after pushing to GitHub -->
 
-### 3 — Backend — Django admin panel
+### ii. Backend — API docs (Swagger UI)
+
+<!-- Add screenshot here after pushing to GitHub -->
+
+### ii. Backend — Django admin panel
 
 <!-- Add screenshot here after pushing to GitHub -->
 
 ---
 
-## Prerequisites
+## 2) Prerequisites
 
 | Tool                    | Minimum version |
 | ----------------------- | --------------- |
@@ -48,18 +48,27 @@ Draft → Submitted → Under Review → { Need More Information, Approved, Reje
 
 ---
 
-## Local development (without Docker)
+## 3. Clone the project
 
-### 1 — Clone and enter the project
+### i) ssh githhub connection
 
 ```sh
-git clone <repo-url> workflow-tracker
+git clone git@github.com:Kaveks/workflow-tracker.git workflow-tracker
 cd workflow-tracker
 ```
 
-### 2 — Backend setup
+### ii) HTTp github connection
 
-#### Create and activate a virtual environment
+```sh
+git clone https://github.com/Kaveks/workflow-tracker.git
+cd workflow-tracker
+```
+
+## 4. Local development (without Docker)
+
+### a) Backend setup
+
+##### i) Create and activate a virtual environment
 
 **Linux / macOS**
 
@@ -71,13 +80,13 @@ source .venv/bin/activate
 
 **Windows (PowerShell)**
 
-```powershell
+```sh
 cd backend
 python -m venv .venv
 .venv\Scripts\Activate.ps1
 ```
 
-#### Install dependencies
+##### ii) Install dependencies
 
 **Linux / macOS**
 
@@ -87,11 +96,11 @@ pip3 install -r requirements.txt
 
 **Windows**
 
-```powershell
+```sh
 pip install -r requirements.txt
 ```
 
-#### Create the environment file
+#### iii) Create the environment file
 
 **Linux / macOS**
 
@@ -101,13 +110,13 @@ touch .env
 
 **Windows (PowerShell)**
 
-```powershell
+```sh
 New-Item -ItemType File .env
 ```
 
 Open `.env` and add the following (replace `<SECRET_KEY>` with the value generated in the next step):
 
-```env
+```sh
 SECRET_KEY=<SECRET_KEY>
 DEBUG=True
 ALLOWED_HOSTS=localhost,127.0.0.1
@@ -115,7 +124,7 @@ CORS_ALLOWED_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
 CSRF_TRUSTED_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
 ```
 
-#### Generate a SECRET_KEY
+#### iv) Generate a SECRET_KEY
 
 Run the included generator from inside the `backend/` directory:
 
@@ -127,34 +136,34 @@ python3 applications/utils/django_secrete.py
 
 **Windows**
 
-```powershell
+```sh
 python applications\utils\django_secrete.py
 ```
 
 Copy the printed key and paste it as the value of `SECRET_KEY` in `.env`.
 
-#### Apply migrations and start the server
+---
 
-**Linux / macOS**
+#### vi) Apply migrations and runserver
+
+#### Local — Linux / macOS
 
 ```sh
-python3 manage.py migrate
+python3 manage.py makemigrations && python3 manage.py migrate
 python3 manage.py runserver
 ```
 
-**Windows**
+#### Local — Windows
 
-```powershell
-python manage.py migrate
+```sh
+python manage.py makemigrations && python3 manage.py migrate
 python manage.py runserver
 ```
 
 The API is available at `http://localhost:8000/api/v1/`.  
 Interactive Swagger docs are at `http://localhost:8000/api/v1/docs`.
 
----
-
-### 3 — Frontend setup
+### b) Frontend setup
 
 Open a **new terminal** and run:
 
@@ -162,7 +171,7 @@ Open a **new terminal** and run:
 cd frontend
 ```
 
-#### Create the environment file
+#### i) Create the environment file
 
 **Linux / macOS**
 
@@ -172,13 +181,13 @@ touch .env.local
 
 **Windows (PowerShell)**
 
-```powershell
+```sh
 New-Item -ItemType File .env.local
 ```
 
 Open `.env.local` and add:
 
-```env
+```sh
 # Browser (client-side) — always localhost so the user's browser can reach the backend.
 NEXT_PUBLIC_API_BASE_URL=http://localhost:8000/api/v1
 
@@ -191,7 +200,7 @@ API_BASE_URL=http://backend:8000/api/v1
 IS_DOCKER=false
 ```
 
-#### Install dependencies and start the dev server
+#### ii) Install dependencies and start the dev server
 
 ```sh
 npm install
@@ -202,7 +211,7 @@ The app is at `http://localhost:3000`.
 
 ---
 
-### 4 — Running tests (local)
+## 5) Running tests (local)
 
 From inside the `backend/` directory with the virtual environment active:
 
@@ -214,18 +223,20 @@ python3 manage.py test
 
 **Windows**
 
-```powershell
+```sh
 python manage.py test
 ```
 
 ---
 
-## Quick start (Docker)
+## 6) Quick start (Docker)
 
 > Requires Docker and Docker Compose v2. The `env_file` entries below assume
-> `backend/.env` and `frontend/.env.local` already exist (see steps 2 and 3 above).
+> `backend/.env` and `frontend/.env.local` already exist (see steps 4a(iii) and 4b(i) above).
 
 > Make sure you are on the folder "workflow-tracker" when running makefile.
+
+> Note! no need of making migrations manually because the dockerfile does the job for you,
 
 ```sh
 # Build images
@@ -254,7 +265,7 @@ make clean
 Migrations run automatically on backend container start. SQLite is persisted
 in a named Docker volume and survives restarts until `make clean` is run.
 
-### Docker env files
+### i) Docker env files
 
 The Compose file reads environment variables directly from the local `.env` files:
 
@@ -265,7 +276,7 @@ The Compose file reads environment variables directly from the local `.env` file
 
 No environment variables are hardcoded in `docker-compose.yml`.
 
-### Available Make targets
+### ii)Available Make targets
 
 ```sh
 make help             # list all targets
@@ -276,19 +287,20 @@ make logs             # tail all service logs
 make restart          # down + up
 make clean            # full tear-down including volume
 make test             # run backend tests inside container
-make migrate          # apply Django migrations inside container
+make makemigrations   # generate migration files from model changes
+make migrate          # apply migrations to the database
 make createsuperuser  # create a Django admin superuser (interactive)
 make backend-shell    # open shell in backend container
 ```
 
 ---
 
-## Django admin panel
+## 7) Django admin panel
 
 The admin panel is available at `http://localhost:8000/admin/` and requires a
 superuser account.
 
-### Create a superuser (Docker)
+### a) Create a superuser (Docker)
 
 The stack must be running (`make up`) before you create a superuser.
 
@@ -306,7 +318,7 @@ Password (again):
 Superuser created successfully.
 ```
 
-### Create a superuser (local — no Docker)
+### b) Create a superuser (local — no Docker)
 
 From inside the `backend/` directory with the virtual environment active:
 
@@ -318,7 +330,7 @@ python3 manage.py createsuperuser
 
 **Windows**
 
-```powershell
+```sh
 python manage.py createsuperuser
 ```
 
